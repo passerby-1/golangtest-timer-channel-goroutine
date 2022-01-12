@@ -7,21 +7,21 @@ import (
 
 func main() {
 
-	go sub()
+	timeChan := time.NewTimer(time.Second * 5)
+	tickChan := time.NewTimer(time.Second * 1)
+	resetChan := make(chan bool)
+	resetCompreteChan := make(chan bool)
+
+	go sub(timeChan, tickChan, resetChan, resetCompreteChan)
+	go Wait(resetChan, resetCompreteChan)
 
 	for {
 		time.Sleep(100)
 	}
 }
 
-func sub() {
+func sub(timeChan *time.Timer, tickChan *time.Timer, resetChan chan bool, resetCompreteChan chan bool) {
 	var count int = 0
-	timeChan := time.NewTimer(time.Second * 5)
-	tickChan := time.NewTimer(time.Second * 1)
-	resetChan := make(chan bool)
-	resetCompreteChan := make(chan bool)
-
-	go Wait(resetChan, resetCompreteChan)
 
 	for {
 
